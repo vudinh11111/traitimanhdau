@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nginx-pv
+  name: nginx-pv-2
 spec:
   capacity:
     storage: 5Gi
@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nginx-pvc
+  name: nginx-pvc-2
 spec:
   accessModes:
     - ReadWriteMany
