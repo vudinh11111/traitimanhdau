@@ -27,7 +27,7 @@ metadata:
   name: nginx-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
