@@ -18,7 +18,14 @@ spec:
       - name: nginx
         image: nginx:latest
         ports:
-        - containerPort: 80
+          - containerPort: 80
+        volumeMounts:
+          - name: nginx-storage
+            mountPath: /usr/share/nginx/html  # Thư mục trong container
+      volumes:
+        - name: nginx-storage
+          persistentVolumeClaim:
+            claimName: nginx-pvc
 
 ---
 apiVersion: v1
