@@ -25,7 +25,7 @@ spec:
       volumes:
         - name: nginx-storage
           persistentVolumeClaim:
-            claimName: test
+            claimName: testt
 
 ---
 apiVersion: v1
