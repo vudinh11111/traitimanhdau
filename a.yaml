@@ -1,42 +1,58 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: nginx-deployment
-  labels:
-    app: nginx
+  name: longhorn-pv
 spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:latest
-        ports:
-          - containerPort: 80
-        volumeMounts:
-          - name: nginx-storage
-            mountPath: /usr/share/nginx/html  # Thư mục trong container
-      volumes:
-        - name: nginx-storage
-          persistentVolumeClaim:
-            claimName: testt
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  hostPath:
+    path: /mnt/disks/longhorn-pv
+  persistentVolumeReclaimPolicy: Retain
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: longhorn-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx:latest
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: longhorn-storage
+  volumes:
+    - name: longhorn-storage
+      persistentVolumeClaim:
+        claimName: longhorn-pvc
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: longhorn-service
 spec:
   selector:
-    app: nginx
+    app: longhorn-pod
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: NodePort
+  type: ClusterIP
+
