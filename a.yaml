@@ -1,35 +1,17 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: v-test
-  namespace: default
-  labels:
-    app: longhorn-pod
+  name: v-test-pod
 spec:
   containers:
-  - name: v-test
+  - name: v-test-container
     image: nginx:latest
-    imagePullPolicy: IfNotPresent
     volumeMounts:
-    - name: volv
+    - name: vupvc-volume
       mountPath: /data
     ports:
     - containerPort: 80
   volumes:
-  - name: volv
+  - name: vupvc-volume
     persistentVolumeClaim:
       claimName: vupvc
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: longhorn-service
-spec:
-  selector:
-    app: longhorn-pod
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: ClusterIP
