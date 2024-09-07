@@ -7,12 +7,12 @@ spec:
   - name: v-test-container
     image: nginx:latest
     volumeMounts:
-    - name: vupvc-volume
+    - name: vupvc
       mountPath: /data
     ports:
     - containerPort: 80
   volumes:
-  - name: vupvc-volume
+  - name: vupvc
     persistentVolumeClaim:
-      claimName: vupvc
+      claimName: vu
 
