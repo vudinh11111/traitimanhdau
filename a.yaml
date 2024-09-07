@@ -4,15 +4,15 @@ metadata:
   name: v-test-pod
 spec:
   containers:
-  - name: v-test-container
+  - name: v-test
     image: nginx:latest
     volumeMounts:
-    - name: vupvc
+    - name: vu
       mountPath: /data
     ports:
     - containerPort: 80
   volumes:
-  - name: vupvc
+  - name: vu
     persistentVolumeClaim:
-      claimName: vu
+      claimName: vupvc
 
