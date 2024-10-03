@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-deployment
+  name: mysql-deployment-4
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: myapp-2
+      app: myapp-4
   template:
     metadata:
       labels:
-        app: myapp-2
+        app: myapp-4
     spec:
       nodeSelector:
         kubernetes.io/hostname: nodes-one
@@ -20,25 +20,33 @@ spec:
         ports:
         - containerPort: 80
       - name: mysql-container
-        image: mysql:latest  # Sử dụng image MySQL phiên bản 5.7
+        image: mysql:latest
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: "yourpassword123"  # Đặt mật khẩu root cho MySQL
+          value: "yourpassword123"
         ports:
         - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-storage
+      volumes:
+      - name: mysql-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service-2
+  name: my-service-4
 spec:
   selector:
-    app: myapp-2
+    app:  myapp-4
   ports:
     - protocol: TCP
-      port: 3002
+      port: 3004
       targetPort: 80
-      nodePort: 30002
+      nodePort: 30004
   type: NodePort
 ---
 apiVersion: v1
@@ -47,10 +55,11 @@ metadata:
   name: mysql-service
 spec:
   selector:
-    app: myapp-2
+    app: myapp-4
   ports:
     - protocol: TCP
       port: 3306
       targetPort: 3306
-      nodePort: 31002
+      nodePort: 31004
   type: NodePort
+
