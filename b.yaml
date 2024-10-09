@@ -1,0 +1,96 @@
+# PersistentVolume và PersistentVolumeClaim cho MySQL
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-2
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/mysql"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nodes-two
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc-2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp-4
+  template:
+    metadata:
+      labels:
+        app: myapp-4
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: nodes-two
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+      - name: mysql-container
+        image: mysql:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "yourpassword123"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-storage
+      volumes:
+      - name: mysql-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc-2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service-4
+spec:
+  selector:
+    app: myapp-4
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 31004
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-4
+spec:
+  selector:
+    app: myapp-4
+  ports:
+    - protocol: TCP
+      port: 3004
+      targetPort: 80
+      nodePort: 30004
+  type: NodePort
