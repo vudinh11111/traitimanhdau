@@ -1,16 +1,49 @@
+# PersistentVolume và PersistentVolumeClaim cho MySQL
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/mysql"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nodes-one
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment-4
+  name: mysql-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myapp-4
+      app: myapp-3
   template:
     metadata:
       labels:
-        app: myapp-4
+        app: myapp-3
     spec:
       nodeSelector:
         kubernetes.io/hostname: nodes-one
@@ -33,33 +66,31 @@ spec:
       - name: mysql-storage
         persistentVolumeClaim:
           claimName: mysql-pvc
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service-4
+  name: mysql-service-3
 spec:
   selector:
-    app:  myapp-4
-  ports:
-    - protocol: TCP
-      port: 3004
-      targetPort: 80
-      nodePort: 30004
-  type: NodePort
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql-service
-spec:
-  selector:
-    app: myapp-4
+    app: myapp-3
   ports:
     - protocol: TCP
       port: 3306
       targetPort: 3306
-      nodePort: 31004
+      nodePort: 31003
   type: NodePort
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-3
+spec:
+  selector:
+    app: myapp-3
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 80
+      nodePort: 30003
+  type: NodePort
