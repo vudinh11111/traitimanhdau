@@ -58,7 +58,7 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: mysql-storage
-        - name: hethonghoc-container
+      - name: hethonghoc-container
         image: vudinh112/he_thong_hoc:v4
         ports:
         - containerPort: 2002
