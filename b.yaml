@@ -62,7 +62,7 @@ spec:
         image: vudinh112/he_thong_hoc:v13
         env:
         - name: MYSQL_HOST
-          value: "192.168.5.164:30004"
+          value: "192.168.5.164:31004"
         ports:
         - containerPort: 2002
       volumes:
