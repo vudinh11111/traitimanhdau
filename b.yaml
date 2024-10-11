@@ -79,7 +79,7 @@ spec:
     app: myapp-4
   ports:
     - protocol: TCP
-      port: 3306
+      port: 3000
       targetPort: 3306
       nodePort: 31004
   type: NodePort
