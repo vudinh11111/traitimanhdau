@@ -48,8 +48,8 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: nodes-one
       containers:
-      - name: nginx-container
-        image: nginx:latest
+      - name: hethonghoc-container
+        image: vudinh112/he_thong_hoc:v1
         ports:
         - containerPort: 3010
       - name: mysql-container
