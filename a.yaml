@@ -59,7 +59,7 @@ spec:
         - mountPath: /var/lib/mysql
           name: mysql-storage
       - name: hethonghoc-container
-        image: vudinh112/he_thong_hoc:v4
+        image: vudinh112/he_thong_hoc:v5
         env:
         - name: MYSQL_HOST
           value: "mysql-service-3"
