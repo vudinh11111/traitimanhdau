@@ -1,4 +1,4 @@
-# PersistentVolume cho MySQL
+# PersistentVolume và PersistentVolumeClaim cho MySQL
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -20,7 +20,6 @@ spec:
               values:
                 - nodes-two
 ---
-# PersistentVolumeClaim cho MySQL
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -32,7 +31,6 @@ spec:
     requests:
       storage: 5Gi
 ---
-# Deployment cho MySQL
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -54,7 +52,7 @@ spec:
         image: mysql:latest
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: "yourpassword123"  # Đặt mật khẩu cho MySQL
+          value: "yourpassword123"
         ports:
         - containerPort: 3306
         volumeMounts:
@@ -64,38 +62,38 @@ spec:
         image: vudinh112/he_thong_hoc:v13
         env:
         - name: MYSQL_HOST
-          value: "mysql-service-4"  # Tên dịch vụ MySQL
+          value: "mysql-service-4"
         ports:
         - containerPort: 2002
       volumes:
       - name: mysql-storage
         persistentVolumeClaim:
-          claimName: mysql-pvc-2  # Sử dụng PVC đã định nghĩa
+          claimName: mysql-pvc-2
 ---
-# Service cho MySQL
 apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service-4
 spec:
   selector:
-    app: myapp-4  # Chọn các pod có nhãn app: myapp-4
+    app: myapp-4
   ports:
     - protocol: TCP
-      port: 3306      # Port mà dịch vụ sẽ lắng nghe
-      targetPort: 3306  # Port mà MySQL đang lắng nghe
-  type: ClusterIP   # Sử dụng ClusterIP để kết nối nội bộ
+      port: 3000
+      targetPort: 3306
+      nodePort: 31004
+  type: NodePort
 ---
-# Service cho frontend
 apiVersion: v1
 kind: Service
 metadata:
   name: my-service-4
 spec:
   selector:
-    app: myapp-4  # Chọn các pod có nhãn app: myapp-4
+    app: myapp-4
   ports:
     - protocol: TCP
-      port: 3004     # Port mà dịch vụ sẽ lắng nghe
-      targetPort: 2002  # Port mà ứng dụng frontend đang lắng nghe
-  type: NodePort    # Sử dụng NodePort để truy cập từ bên ngoài
+      port: 3004
+      targetPort: 2002
+      nodePort: 30004
+  type: NodePort
