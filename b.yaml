@@ -1,4 +1,4 @@
-# PersistentVolume cho MySQL
+# PersistentVolume và PersistentVolumeClaim cho MySQL
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -20,7 +20,6 @@ spec:
               values:
                 - nodes-two
 ---
-# PersistentVolumeClaim cho MySQL
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -32,7 +31,6 @@ spec:
     requests:
       storage: 5Gi
 ---
-# Deployment cho MySQL và ứng dụng hệ thống học
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -72,7 +70,6 @@ spec:
         persistentVolumeClaim:
           claimName: mysql-pvc-2
 ---
-# Service cho MySQL
 apiVersion: v1
 kind: Service
 metadata:
@@ -84,9 +81,9 @@ spec:
     - protocol: TCP
       port: 3306
       targetPort: 3306
-  type: ClusterIP
+      nodePort: 31004
+  type: NodePort
 ---
-# Service cho Ứng dụng Hệ Thống Học
 apiVersion: v1
 kind: Service
 metadata:
@@ -98,4 +95,5 @@ spec:
     - protocol: TCP
       port: 3004
       targetPort: 2002
-  type: ClusterIP
+      nodePort: 30004
+  type: NodePort
