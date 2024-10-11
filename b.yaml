@@ -62,7 +62,7 @@ spec:
         image: vudinh112/he_thong_hoc:v13
         env:
         - name: MYSQL_HOST
-          value: "mysql-service-4"
+          value: "mysql-service-4:3306"
         ports:
         - containerPort: 2002
       volumes:
@@ -79,7 +79,7 @@ spec:
     app: myapp-4
   ports:
     - protocol: TCP
-      port: 3000
+      port: 3306
       targetPort: 3306
       nodePort: 31004
   type: NodePort
