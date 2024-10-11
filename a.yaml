@@ -48,10 +48,6 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: nodes-one
       containers:
-      - name: hethonghoc-container
-        image: vudinh112/he_thong_hoc:v4
-        ports:
-        - containerPort: 2002
       - name: mysql-container
         image: mysql:latest
         env:
@@ -62,6 +58,10 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: mysql-storage
+        - name: hethonghoc-container
+        image: vudinh112/he_thong_hoc:v4
+        ports:
+        - containerPort: 2002
       volumes:
       - name: mysql-storage
         persistentVolumeClaim:
