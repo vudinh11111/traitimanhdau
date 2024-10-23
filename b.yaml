@@ -64,7 +64,7 @@ spec:
         - name: MYSQL_HOST
           value: "mysql-service-2"
         ports:
-        - containerPort: 80 #8080
+        - containerPort: 8080
       volumes:
       - name: mysql-storage
         persistentVolumeClaim:
@@ -80,7 +80,7 @@ spec:
   ports:
     - protocol: TCP
       port: 3002
-      targetPort: 80 #8080
+      targetPort: 8080
       nodePort: 30002
   type: NodePort
 ---
