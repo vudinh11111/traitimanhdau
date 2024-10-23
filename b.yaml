@@ -39,16 +39,16 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myapp-4
+      app: myapp-2
   template:
     metadata:
       labels:
-        app: myapp-4
+        app: myapp-2
     spec:
       nodeSelector:
         kubernetes.io/hostname: nodes-two
       containers:
-      - name: mysql-container
+      - name: mysql-container-2
         image: mysql:latest
         env:
         - name: MYSQL_ROOT_PASSWORD
@@ -59,12 +59,12 @@ spec:
         - mountPath: /var/lib/mysql
           name: mysql-storage
       - name: hethonghoc-container
-        image: vudinh112/he_thong_hoc:v22
-        env:
-        - name: MYSQL_HOST
-          value: "mysql-service-4"
+        image: nginx #vudinh112/he_thong_hoc:v22
+        #env:
+        #- name: MYSQL_HOST
+         # value: "mysql-service-2"
         ports:
-        - containerPort: 2002
+        - containerPort: 80 #8080
       volumes:
       - name: mysql-storage
         persistentVolumeClaim:
@@ -73,27 +73,27 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service-4
+  name: my-service-2
 spec:
   selector:
-    app: myapp-4
+    app: myapp-2
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3306
-      nodePort: 31004
+      port: 3002
+      targetPort: 80 #8080
+      nodePort: 30002
   type: NodePort
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service-4
+  name: mysql-service-2
 spec:
   selector:
-    app: myapp-4
+    app: myapp-2
   ports:
     - protocol: TCP
-      port: 3004
-      targetPort: 2002
-      nodePort: 30004
+      port: 3000
+      targetPort: 3306
+      nodePort: 31002
   type: NodePort
