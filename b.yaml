@@ -59,10 +59,10 @@ spec:
         - mountPath: /var/lib/mysql
           name: mysql-storage
       - name: hethonghoc-container
-        image: nginx #vudinh112/he_thong_hoc:v22
-        #env:
-        #- name: MYSQL_HOST
-         # value: "mysql-service-2"
+        image: vudinh112/he_thong_hoc:v22
+        env:
+        - name: MYSQL_HOST
+          value: "mysql-service-2"
         ports:
         - containerPort: 80 #8080
       volumes:
