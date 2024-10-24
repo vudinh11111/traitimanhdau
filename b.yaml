@@ -45,6 +45,7 @@ spec:
       labels:
         app: myapp-2
     spec:
+      terminationGracePeriodSeconds: 30
       nodeSelector:
         kubernetes.io/hostname: nodes-two
       containers:
@@ -59,6 +60,7 @@ spec:
         - mountPath: /var/lib/mysql
           name: mysql-storage
       - name: hethonghoc-container
+        imagePullPolicy: "Always"
         image: vudinh112/he_thong_hoc:v22
         env:
         - name: MYSQL_HOST
