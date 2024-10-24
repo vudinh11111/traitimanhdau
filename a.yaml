@@ -45,6 +45,7 @@ spec:
       labels:
         app: myapp-1
     spec:
+      terminationGracePeriodSeconds: 30
       nodeSelector:
         kubernetes.io/hostname: nodes-one
       containers:
